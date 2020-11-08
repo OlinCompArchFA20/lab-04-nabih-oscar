@@ -12,7 +12,25 @@ module ALU
 
   always @* begin
     case(alu_op)
-      default : ;
+      `ADD:  begin DOSOMETHINGNEHRE; end
+      `ADDI:  begin DOSOMETHINGNEHRE; end
+      `ADDIU:  begin DOSOMETHINGNEHRE; end
+      `ADDU:  begin DOSOMETHINGNEHRE; end
+      `AND:  begin DOSOMETHINGNEHRE; end
+      `ANDI:  begin DOSOMETHINGNEHRE; end
+      `NOR:  begin DOSOMETHINGNEHRE; end
+      `OR:  begin DOSOMETHINGNEHRE; end
+      `ORI:  begin DOSOMETHINGNEHRE; end
+      `SLT:  begin DOSOMETHINGNEHRE; end
+      `SLTI:  begin DOSOMETHINGNEHRE; end
+      `SLTIU:  begin DOSOMETHINGNEHRE; end
+      `SLTU:  begin DOSOMETHINGNEHRE; end
+      `SLL:  begin DOSOMETHINGNEHRE; end
+      `SRL:  begin DOSOMETHINGNEHRE; end
+      `SUB:  begin DOSOMETHINGNEHRE; end
+      `SUBU:  begin DOSOMETHINGNEHRE; end
+      `NOP:  begin DOSOMETHINGNEHRE; end
+      default : /*Default catch*/;
     endcase
   end
 
