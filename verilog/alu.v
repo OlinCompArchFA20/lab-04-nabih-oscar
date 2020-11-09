@@ -78,31 +78,7 @@ module ALU
   integer j;
   //SLT CHECK
   always @* begin
-    if (alu_op == `F_SLT) begin
-      if (A == B) begin
-        isZero = 0;
-      end
-      else begin
-        isZero = neg;
-      end
-    end
-    else if(alu_op == `F_SLTU) begin
-      if (A == B) begin
-        isZero = 0;
-      end
-      else begin
-        isZero = neg;
-      end
-    end
-    else if (alu_op == `SLTI) begin
-      if (A == B) begin
-        isZero = 0;
-      end
-      else begin
-        isZero = neg;
-      end
-    end
-    else if(alu_op == `SLTIU) begin
+    if (alu_op == `F_SLT || alu_op == `F_SLTU || alu_op == `SLTI || alu_op == `SLTIU) begin
       if (A == B) begin
         isZero = 0;
       end
