@@ -32,9 +32,9 @@ module ALU
   //Assigns overflow for cases
   always @* begin
     case (alu_op)
-      `F_ADD:  begin overflow = neg; end
+      `F_ADD:  begin {overflow, R} = A+B; end
       `ADDI:  begin overflow = neg; end
-      `ADDIU:  begin overflow = carry[`W_CPU]; end
+      `ADDIU:  begin {overflow, R} = A+B; end
       `F_ADDU:  begin overflow = carry[`W_CPU]; end
       `F_AND:  begin overflow = 1'b0; end
       `ANDI:  begin overflow = 1'b0; end
