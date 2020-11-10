@@ -57,92 +57,110 @@ module DECODE
       // @@@@@@@@@@@@@@@@@@@@@@@@,,@@@@@@@@@@@@@@@@@@@@@@@@@
       // """""""""""""""""""""""""""""""""""""""""""""""""""
       // https://textart.io/art/tag/dragon/1
-      `OP_ZERO: begin alu_op  = inst[`FLD_FUNCT]; end
-      default: begin alu_op  = inst[`FLD_OPCODE]; end
-    endcase
-    case(alu_op)
-        `F_SYSCAL: begin
-          wa = rd; ra1 = `REG_A0; ra2 = `REG_V0; reg_wen = `WDIS;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_ADD:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `ADDI:  begin
-          wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `ADDIU:  begin
-          wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_ADDU:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_AND:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `ANDI:  begin
-          wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_NOR:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_OR:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `ORI:  begin
-          wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_SLT:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `SLTI:  begin
-          wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `SLTIU:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_SLTU:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_SLL:  begin
-          wa = rd; ra2 = inst[`FLD_SHAMT]; ra1 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_SHA;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_SRL:  begin
-          wa = rd; ra2 = inst[`FLD_SHAMT]; ra1 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_SHA;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_SUB:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `F_SUBU:  begin
-          wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `XORI:  begin
-          wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
-          mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
-          reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
-        `BEQ: begin end
-        `BNE: begin end
-        `J_: begin end
-        `JAL: begin end
-        `JR: begin end
-        `LW: begin end
+      `OP_ZERO: begin alu_op  = inst[`FLD_FUNCT];
+                  case(alu_op)
+                      `F_SYSCAL: begin
+                        wa = rd; ra1 = `REG_A0; ra2 = `REG_V0; reg_wen = `WDIS;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_ADD:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_ADDU:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_AND:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_NOR:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_OR:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_SLT:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_SLTU:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_SLL:  begin
+                        wa = rd; ra2 = inst[`FLD_SHAMT]; ra1 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_SHA;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_SRL:  begin
+                        wa = rd; ra2 = inst[`FLD_SHAMT]; ra1 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_SHA;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_SUB:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_SUBU:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_REG;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `F_JR: begin
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_JUMP; end
+                  endcase
+      end
+      default: begin alu_op  = inst[`FLD_OPCODE];
+                  case(alu_op)
+                      `ADDI:  begin
+                        wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `ADDIU:  begin
+                        wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `ANDI:  begin
+                        wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `ORI:  begin
+                        wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `SLTI:  begin
+                        wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `SLTIU:  begin
+                        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `XORI:  begin
+                        wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+                      `BEQ: begin
+                        ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; end
+                      `BNE: begin
+                        ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; end
+                      `J_: begin
+                        reg_wen = `WDIS;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_JUMP; end
+                      `JAL: begin
+                        wa = 5'd31; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_PC; pc_src  = `PC_SRC_JUMP; end
+                      `LW: begin end
+                  endcase
+      end
     endcase
   end
 

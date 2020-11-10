@@ -26,7 +26,7 @@ module SINGLE_CYCLE_CPU
   reg [`W_IMM-1:0]     immExt; // Immediate Field
   wire [`W_JADDR-1:0]   addr;    // Jump Addr Field
   wire [`W_FUNCT-1:0]   alu_op;  // ALU OP
-  wire [`W_PC_SRC-1:0]  pc_src;  // PC Source
+  reg [`W_PC_SRC-1:0]  pc_src;  // PC Source
   wire [`W_MEM_CMD-1:0] mem_cmd; // Mem Command
   wire [`W_ALU_SRC-1:0] alu_src; // ALU Source
   wire [`W_REG_SRC-1:0] reg_src;// Mem to Reg
@@ -54,10 +54,8 @@ module SINGLE_CYCLE_CPU
 
   REGFILE stage_REGFILE(clk, rst, reg_wen, wa, Dw, ra1, ra2, rd1, rd2);
 
-  FETCH stage_FETCH(clk, rst, pc_src, branch_ctrl, reg_addr, jump_addr, imm_addr, pc_next);
-
   always @* begin
-    #10
+
     case(imm_ext)
       `IMM_ZERO_EXT: begin immExt = 16'h0000; end
       `IMM_SIGN_EXT: begin immExt = 16'hffff; end
@@ -69,32 +67,33 @@ module SINGLE_CYCLE_CPU
       `ALU_SRC_SHA: begin data_ALU = {27'b000000000000000000000000000,ra2}; end
       default:;
     endcase
-
-    if (alu_op == `BEQ || alu_op == `BNE || alu_op == `J_ || alu_op == `JAL || alu_op == `JR || alu_op == `LW) begin
-
-    end
+    // if (alu_op == `BEQ) begin
+    //     if (rd1 == rd2) begin pc_src = `PC_SRC_BRCH; end
+    //     else begin pc_src = `PC_SRC_NEXT; end
+    // end
+    // else if (alu_op == `BNE) begin
+    //         if (rd1 != rd2) begin pc_src = `PC_SRC_BRCH; end
+    //         else begin pc_src = `PC_SRC_NEXT; end
+    // end
   end
 
-
+  FETCH stage_FETCH(clk, rst, pc_src, branch_ctrl, rd1, jump_addr, imm, pc_next);
 
   ALU stage_ALU(alu_op, rd1, data_ALU, R, overflow, isZero);
 
 
   always @* begin
-    #10
+
     case(reg_src)
       `REG_SRC_ALU: begin Dw = R; end
       `REG_SRC_MEM: begin Dw = data_cpu; end
-      `REG_SRC_PC: begin Dw = R; end
+      `REG_SRC_PC: begin Dw = pc_next; end
       default:;
     endcase
   end
 
-
-
   //SYSCALL Catch
   always @* begin
-    #10
     //Is the instruction a SYSCALL?
     if (alu_op == `F_SYSCAL) begin
         case(rd2)
