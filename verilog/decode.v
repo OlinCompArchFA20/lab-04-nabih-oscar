@@ -32,15 +32,7 @@ module DECODE
   assign rd   = inst[`FLD_RD];
   assign imm  = inst[`FLD_IMM];
   assign jump_addr = inst[`FLD_ADDR];
-  assign alu_op  = inst[`FLD_OPCODE];
 
-  always @(inst) begin
-    if (`DEBUG_DECODE)
-      /* verilator lint_off STMTDLY */
-      #1 // Delay Slightly
-      $display("op = %x rs = %x rt = %x rd = %x imm = %x addr = %x",alu_op,rs,rt,rd,imm,jump_addr);
-      /* verilator lint_on STMTDLY */
-  end
 
   always @* begin
     case(inst[`FLD_OPCODE])
@@ -64,11 +56,25 @@ module DECODE
       // @@@@@@@@@@@@@@@@@@@@@@@@,,@@@@@@@@@@@@@@@@@@@@@@@@@
       // """""""""""""""""""""""""""""""""""""""""""""""""""
       // https://textart.io/art/tag/dragon/1
-      default: begin
-        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WDIS;
+      `OP_ZERO: begin
+        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `W_EN;
         imm_ext = `IMM_ZERO_EXT; mem_cmd = `MEM_NOP;
         alu_src = `ALU_SRC_REG;  reg_src = `REG_SRC_ALU;
-        pc_src  = `PC_SRC_NEXT; end
+        pc_src  = `PC_SRC_NEXT;  alu_op  = inst[`FLD_FUNCT]; end
+      default: begin
+        wa = rd; ra1 = rs; ra2 = rt; reg_wen = `W_EN;
+        imm_ext = `IMM_ZERO_EXT; mem_cmd = `MEM_NOP;
+        alu_src = `ALU_SRC_REG;  reg_src = `REG_SRC_ALU;
+        pc_src  = `PC_SRC_NEXT;  alu_op  = inst[`FLD_OPCODE]; end
     endcase
   end
+
+
+    always @(inst) begin
+      if (`DEBUG_DECODE)
+        /* verilator lint_off STMTDLY */
+        #1 // Delay Slightly
+        $display("op = %x rs = %x rt = %x rd = %x imm = %x addr = %x, reg_wen = %x",alu_op,rs,rt,rd,imm,jump_addr, reg_wen);
+        /* verilator lint_on STMTDLY */
+    end
 endmodule

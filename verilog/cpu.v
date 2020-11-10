@@ -61,8 +61,7 @@ module SINGLE_CYCLE_CPU
   //SYSCALL Catch
   always @* begin
     //Is the instruction a SYSCALL?
-    if (alu_op == `OP_ZERO &&
-        inst[`FLD_FUNCT]  == `F_SYSCAL) begin
+    if (alu_op == `F_SYSCAL) begin
         case(rd1)
           1 : $display("SYSCALL  1: a0 = %x",rd2);
           10: begin
