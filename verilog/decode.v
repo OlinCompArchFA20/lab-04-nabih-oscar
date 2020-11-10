@@ -14,7 +14,7 @@ module DECODE
   output reg [`W_IMM_EXT-1:0] imm_ext, // 1-Sign or 0-Zero extend
   output reg [`W_IMM-1:0]     imm,     // Immediate Field
   // Jump Address
-  output reg [`W_JADDR-1:0]   addr,    // Jump Addr Field
+  output reg [`W_JADDR-1:0]   jump_addr,    // Jump Addr Field
   // ALU Control
   output reg [`W_FUNCT-1:0]   alu_op,  // ALU OP
   // Muxing
@@ -31,13 +31,14 @@ module DECODE
   assign rt   = inst[`FLD_RT];
   assign rd   = inst[`FLD_RD];
   assign imm  = inst[`FLD_IMM];
-  assign addr = inst[`FLD_ADDR];
+  assign jump_addr = inst[`FLD_ADDR];
+  assign alu_op  = inst[`FLD_OPCODE];
 
   always @(inst) begin
     if (`DEBUG_DECODE)
       /* verilator lint_off STMTDLY */
       #1 // Delay Slightly
-      $display("op = %x rs = %x rt = %x rd = %x imm = %x addr = %x",inst[`FLD_OPCODE],rs,rt,rd,imm,addr);
+      $display("op = %x rs = %x rt = %x rd = %x imm = %x addr = %x",alu_op,rs,rt,rd,imm,jump_addr);
       /* verilator lint_on STMTDLY */
   end
 
@@ -67,7 +68,7 @@ module DECODE
         wa = rd; ra1 = rs; ra2 = rt; reg_wen = `WDIS;
         imm_ext = `IMM_ZERO_EXT; mem_cmd = `MEM_NOP;
         alu_src = `ALU_SRC_REG;  reg_src = `REG_SRC_ALU;
-        pc_src  = `PC_SRC_NEXT;  alu_op  = inst[`FLD_OPCODE]; end
+        pc_src  = `PC_SRC_NEXT; end
     endcase
   end
 endmodule

@@ -11,34 +11,12 @@ module ALU
   output reg overflow,
   output reg isZero);
 
-  wire [`W_CPU:0]   carry;
-  wire [`W_CPU-1:0] result;
+  reg [`W_CPU:0]   carry;
+  reg [`W_CPU-1:0] result;
   wire neg;
   wire ovfl;
   wire cout;
 
-  always @* begin
-    case(alu_op)
-      `F_ADD:  begin carry[0] = 0; end
-      `ADDI:  begin carry[0] = 0; end
-      `ADDIU:  begin carry[0] = 0; end
-      `F_ADDU:  begin carry[0] = 0; end
-      `F_AND:  begin carry[0] = 0; end
-      `ANDI:  begin carry[0] = 0; end
-      `F_NOR:  begin carry[0] = 0; end
-      `F_OR:  begin carry[0] = 0; end
-      `ORI:  begin carry[0] = 0; end
-      `F_SLT:  begin carry[0] = 1; end
-      `SLTI:  begin carry[0] = 1; end
-      `SLTIU:  begin carry[0] = 1; end
-      `F_SLTU:  begin carry[0] = 1; end
-      `F_SLL:  begin carry[0] = 0; end
-      `F_SRL:  begin carry[0] = 0; end
-      `F_SUB:  begin carry[0] = 1; end
-      `F_SUBU:  begin carry[0] = 1; end
-      default : /*Default catch*/;
-    endcase
-  end
 
   generate genvar i;
     for (i=0;i<(`W_CPU);i=i+1) begin
