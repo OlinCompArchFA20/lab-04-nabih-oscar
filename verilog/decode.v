@@ -143,13 +143,13 @@ module DECODE
                         mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
                         reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
                       `BEQ: begin
-                        ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        ra1 = rs; ra2 = rt; reg_wen = `WDIS;
                         mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
-                        reg_src = `REG_SRC_ALU; end
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_BRCH; end
                       `BNE: begin
-                        ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        ra1 = rs; ra2 = rt; reg_wen = `WDIS;
                         mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
-                        reg_src = `REG_SRC_ALU; end
+                        reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_BRCH; end
                       `J_: begin
                         reg_wen = `WDIS;
                         mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;

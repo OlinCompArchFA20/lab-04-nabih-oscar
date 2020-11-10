@@ -1,4 +1,4 @@
-addi $a0, $zero, 21      #check what n is for a triangle number we give (our test case is n=6)
+addi $a0, $zero, 6      #check what n is for a triangle number we give (our test case is n=6)
 addi $t0, $zero, 0      # n
 addi $t1, $zero, 0	# Triangle Number for the given n
 

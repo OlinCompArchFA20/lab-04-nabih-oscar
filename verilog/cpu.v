@@ -12,7 +12,7 @@ module SINGLE_CYCLE_CPU
   (input clk,
    input rst);
 
-  wire [`W_EN-1:0]      branch_ctrl;
+  reg [`W_EN-1:0]      branch_ctrl;
   wire [`W_CPU-1:0]     reg_addr;
   wire [`W_JADDR-1:0]   jump_addr;
   wire [`W_IMM-1:0]     imm_addr;
@@ -67,14 +67,16 @@ module SINGLE_CYCLE_CPU
       `ALU_SRC_SHA: begin data_ALU = {27'b000000000000000000000000000,ra2}; end
       default:;
     endcase
-    // if (alu_op == `BEQ) begin
-    //     if (rd1 == rd2) begin pc_src = `PC_SRC_BRCH; end
-    //     else begin pc_src = `PC_SRC_NEXT; end
-    // end
-    // else if (alu_op == `BNE) begin
-    //         if (rd1 != rd2) begin pc_src = `PC_SRC_BRCH; end
-    //         else begin pc_src = `PC_SRC_NEXT; end
-    // end
+  end
+  always @* begin
+    if (alu_op == `BEQ) begin
+        if (rd1 == rd2) begin branch_ctrl = `WREN; end
+        else begin branch_ctrl = `WDIS; end
+    end
+    else if (alu_op == `BNE) begin
+            if (rd1 != rd2) begin branch_ctrl = `WREN; end
+            else begin branch_ctrl = `WDIS; end
+    end
   end
 
   FETCH stage_FETCH(clk, rst, pc_src, branch_ctrl, rd1, jump_addr, imm, pc_next);
@@ -95,6 +97,7 @@ module SINGLE_CYCLE_CPU
   //SYSCALL Catch
   always @* begin
     //Is the instruction a SYSCALL?
+    #10
     if (alu_op == `F_SYSCAL) begin
         case(rd2)
           1 : $display("SYSCALL  1: a0 = %x",rd1);

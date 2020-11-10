@@ -21,7 +21,13 @@ module FETCH
       case(pc_src)
           `PC_SRC_NEXT: begin pc_next <= pc_next + 4; end
           `PC_SRC_JUMP: begin pc_next <= jump_addr<<2; end
-          `PC_SRC_BRCH: begin pc_next <= pc_next + imm_addr*4; end
+          `PC_SRC_BRCH: begin if (branch_ctrl == `WREN) begin
+                                  pc_next <= pc_next + imm_addr*4 + 4;
+                                  end
+                              else begin
+                                  pc_next <= pc_next + 4;
+                                  end
+                        end
           `PC_SRC_REGF: begin pc_next <= reg_addr; end
         default     : pc_next <= pc_next + 4;
       endcase

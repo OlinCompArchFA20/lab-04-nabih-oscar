@@ -1,4 +1,4 @@
-addi $a0, $zero, 5        #assume N>=2 argument provided in a0
+addi $a0, $zero, 8        #assume N>=2 argument provided in a0
 addi $t0, $zero, 1        #F_(n-1)
 addi $t1, $zero, 1        #F_(n-2)
 addi $t2, $zero, 2        #n
