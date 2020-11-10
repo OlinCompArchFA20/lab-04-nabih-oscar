@@ -17,6 +17,11 @@ module ALU
   wire ovfl;
   wire cout;
 
+  always @* begin
+    if (alu_op == `F_SLT || alu_op == `F_SLTU || alu_op == `SLTI || alu_op == `SLTIU || alu_op == `F_SUB || alu_op == `F_SUBU) begin
+      carry[0] = 1;
+    end
+  end
 
   generate genvar i;
     for (i=0;i<(`W_CPU);i=i+1) begin
@@ -32,9 +37,9 @@ module ALU
   //Assigns overflow for cases
   always @* begin
     case (alu_op)
-      `F_ADD:  begin {overflow, R} = A+B; end
+      `F_ADD:  begin overflow = neg; end
       `ADDI:  begin overflow = neg; end
-      `ADDIU:  begin {overflow, R} = A+B; end
+      `ADDIU:  begin overflow = carry[`W_CPU]; end
       `F_ADDU:  begin overflow = carry[`W_CPU]; end
       `F_AND:  begin overflow = 1'b0; end
       `ANDI:  begin overflow = 1'b0; end
@@ -81,7 +86,7 @@ module ALU
       end
     end
     else begin
-      R = result;
+      R = 32'd10;
     end
   end
 endmodule

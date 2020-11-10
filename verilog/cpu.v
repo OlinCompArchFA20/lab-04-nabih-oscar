@@ -62,6 +62,7 @@ module SINGLE_CYCLE_CPU
   always @* begin
     //Is the instruction a SYSCALL?
     if (alu_op == `F_SYSCAL) begin
+        $display("SYSCALL  1: a0 = %x",rd1);
         case(rd1)
           1 : $display("SYSCALL  1: a0 = %x",rd2);
           10: begin
