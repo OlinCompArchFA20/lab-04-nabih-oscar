@@ -69,7 +69,12 @@ module SINGLE_CYCLE_CPU
       `ALU_SRC_SHA: begin data_ALU = {27'b000000000000000000000000000,ra2}; end
       default:;
     endcase
+
+    if (alu_op == `BEQ || alu_op == `BNE || alu_op == `J_ || alu_op == `JAL || alu_op == `JR || alu_op == `LW) begin
+
+    end
   end
+
 
 
   ALU stage_ALU(alu_op, rd1, data_ALU, R, overflow, isZero);
