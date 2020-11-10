@@ -2,7 +2,7 @@ li $t0 1
 li $t1 2
 add  $t2, $t0, $t1
 sll  $t3, $t2, 4
-srav $t4, $t3, $t1
+srl $t4, $t3, 2
 xori $t5, $t4, 15
 sub  $t6, $t5, $t2
 or   $t7, $t6, $t3

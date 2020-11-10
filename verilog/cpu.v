@@ -23,6 +23,7 @@ module SINGLE_CYCLE_CPU
   wire                  reg_wen; // Register Write Enable
   wire [`W_IMM_EXT-1:0] imm_ext; // 1-Sign or 0-Zero extend
   wire [`W_IMM-1:0]     imm; // Immediate Field
+  reg [`W_IMM-1:0]     immExt; // Immediate Field
   wire [`W_JADDR-1:0]   addr;    // Jump Addr Field
   wire [`W_FUNCT-1:0]   alu_op;  // ALU OP
   wire [`W_PC_SRC-1:0]  pc_src;  // PC Source
@@ -46,25 +47,53 @@ module SINGLE_CYCLE_CPU
   reg [`W_CPU-1:0]     pc_next;
 
 
+
+
   MEMORY stage_MEMORY(clk, rst, pc_next, inst, mem_cmd, rd2, R, data_cpu);
   DECODE stage_DECODE(inst, wa, ra1, ra2, reg_wen, imm_ext, imm, jump_addr, alu_op, pc_src, mem_cmd, alu_src, reg_src);
 
+  REGFILE stage_REGFILE(clk, rst, reg_wen, wa, Dw, ra1, ra2, rd1, rd2);
+
+  FETCH stage_FETCH(clk, rst, pc_src, branch_ctrl, reg_addr, jump_addr, imm_addr, pc_next);
+
   always @* begin
+    #10
+    case(imm_ext)
+      `IMM_ZERO_EXT: begin immExt = 16'h0000; end
+      `IMM_SIGN_EXT: begin immExt = 16'hffff; end
+      default:;
+    endcase
     case(alu_src)
       `ALU_SRC_REG: begin data_ALU = rd2; end
-      `ALU_SRC_IMM: begin data_ALU = {imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm_ext, imm}; end
+      `ALU_SRC_IMM: begin data_ALU = {immExt, imm}; end
       `ALU_SRC_SHA: begin data_ALU = {27'b000000000000000000000000000,ra2}; end
       default:;
     endcase
   end
 
+
+  ALU stage_ALU(alu_op, rd1, data_ALU, R, overflow, isZero);
+
+
+  always @* begin
+    #10
+    case(reg_src)
+      `REG_SRC_ALU: begin Dw = R; end
+      `REG_SRC_MEM: begin Dw = data_cpu; end
+      `REG_SRC_PC: begin Dw = R; end
+      default:;
+    endcase
+  end
+
+
+
   //SYSCALL Catch
   always @* begin
+    #10
     //Is the instruction a SYSCALL?
     if (alu_op == `F_SYSCAL) begin
-        $display("SYSCALL  1: a0 = %x",rd1);
-        case(rd1)
-          1 : $display("SYSCALL  1: a0 = %x",rd2);
+        case(rd2)
+          1 : $display("SYSCALL  1: a0 = %x",rd1);
           10: begin
                 $display("SYSCALL 10: Exiting...");
                 $finish;
@@ -73,17 +102,5 @@ module SINGLE_CYCLE_CPU
         endcase
     end
   end
-  ALU stage_ALU(alu_op, rd1, data_ALU, R, overflow, isZero);
-  always @* begin
-    case(reg_src)
-      `REG_SRC_ALU: begin Dw = R; end
-      `REG_SRC_MEM: begin Dw = data_cpu; end
-      `REG_SRC_PC: begin Dw = R; end
-      default:;
-    endcase
-  end
-  REGFILE stage_REGFILE(clk, rst, reg_wen, wa,Dw, ra1, ra2, rd1, rd2);
-
-  FETCH stage_FETCH(clk, rst, pc_src, branch_ctrl, reg_addr, jump_addr, imm_addr, pc_next);
 
 endmodule
