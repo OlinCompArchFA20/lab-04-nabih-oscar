@@ -142,6 +142,7 @@ module DECODE
                         wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
                         mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
                         reg_src = `REG_SRC_ALU; pc_src  = `PC_SRC_NEXT; end
+
                       `BEQ: begin
                         ra1 = rs; ra2 = rt; reg_wen = `WDIS;
                         mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
@@ -158,7 +159,15 @@ module DECODE
                         wa = 5'd31; ra1 = rs; ra2 = rt; reg_wen = `WREN;
                         mem_cmd = `MEM_NOP; alu_src = `ALU_SRC_IMM;
                         reg_src = `REG_SRC_PC; pc_src  = `PC_SRC_JUMP; end
-                      `LW: begin end
+
+                      `LW:  begin
+                        wa = rt; ra1 = rs; ra2 = rt; reg_wen = `WREN;
+                        mem_cmd = `MEM_READ; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_MEM; pc_src  = `PC_SRC_NEXT; end
+                      `SW:  begin
+                        ra1 = rs; ra2 = rt; reg_wen = `WDIS;
+                        mem_cmd = `MEM_WRITE; alu_src = `ALU_SRC_IMM;
+                        reg_src = `REG_SRC_MEM; pc_src  = `PC_SRC_NEXT; end
                   endcase
       end
     endcase

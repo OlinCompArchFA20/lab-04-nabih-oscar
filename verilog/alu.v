@@ -35,6 +35,8 @@ module ALU
       `F_SUB:  begin R = A-B; end
       `F_SUBU:  begin R = A-B; end
       `XORI:  begin R = A^B; end
+      `LW:  begin R = A+B; end
+      `SW:  begin R = A+B; end
       default: /* default catch */;
     endcase
 

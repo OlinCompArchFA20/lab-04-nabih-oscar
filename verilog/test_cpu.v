@@ -62,13 +62,13 @@ module cpu_test ();
     reset = 1; #10;
     reset = 0; #10;
 
-    // End execution after some time delay - adjust to match your program
-    // or use a smarter approach like looking for an exit syscall or the
-    // PC to be the value of the last instruction in your program.
-    /* verilator lint_off STMTDLY */
-    #2000
-    /* verilator lint_on STMTDLY */
-    $display("Are you sure you should be running this long?");
-    $finish();
+    // // End execution after some time delay - adjust to match your program
+    // // or use a smarter approach like looking for an exit syscall or the
+    // // PC to be the value of the last instruction in your program.
+    // /* verilator lint_off STMTDLY */
+    // #2000
+    // /* verilator lint_on STMTDLY */
+    // $display("Are you sure you should be running this long?");
+    // $finish();
     end
 endmodule
